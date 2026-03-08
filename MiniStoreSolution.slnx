@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="MiniStore.API/MiniStore.API.csproj" />
+  <Project Path="MiniStore.Application/MiniStore.Application.csproj" />
+  <Project Path="MiniStore.Domain/MiniStore.Domain.csproj" />
+  <Project Path="MiniStore.Infrastructure/MiniStore.Infrastructure.csproj" />
+</Solution>

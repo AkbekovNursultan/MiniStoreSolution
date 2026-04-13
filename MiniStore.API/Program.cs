@@ -6,8 +6,11 @@ using MiniStore.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -43,5 +46,8 @@ using (var scope = app.Services.CreateScope())
 
     SeedData.Initialize(context);
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.Run();

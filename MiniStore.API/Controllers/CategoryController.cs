@@ -9,21 +9,25 @@ namespace MiniStore.API.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _service;
+    private readonly ILogger<CategoryController> _logger;
 
-    public CategoryController(ICategoryService service)
+    public CategoryController(ICategoryService service, ILogger<CategoryController> logger)
     {
         _service = service;
+        _logger = logger;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        _logger.LogInformation("HTTP GET all categories");
         return Ok(await _service.GetAllAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
+        _logger.LogInformation("HTTP GET category {CategoryId}", id);
         var category = await _service.GetByIdAsync(id);
 
         if (category == null)
@@ -35,6 +39,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateCategoryDto dto)
     {
+        _logger.LogInformation("HTTP POST create category");
         var category = await _service.CreateAsync(dto);
         return Ok(category);
     }
@@ -42,6 +47,7 @@ public class CategoryController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateCategoryDto dto)
     {
+        _logger.LogInformation("HTTP PUT update category {CategoryId}", id);
         var updated = await _service.UpdateAsync(id, dto);
 
         if (!updated)
@@ -53,6 +59,7 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
+        _logger.LogInformation("HTTP DELETE category {CategoryId}", id);
         var deleted = await _service.DeleteAsync(id);
 
         if (!deleted)

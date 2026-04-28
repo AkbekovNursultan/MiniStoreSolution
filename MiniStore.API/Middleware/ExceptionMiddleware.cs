@@ -1,5 +1,5 @@
 using System.Net;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MiniStore.API.Middleware;
 
@@ -37,13 +37,17 @@ public class ExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var response = new
+        var problemDetails = new ProblemDetails
         {
-            statusCode = context.Response.StatusCode,
-            message = "An unexpected error occurred.",
-            traceId = context.TraceIdentifier
+            Status = context.Response.StatusCode,
+            Title = "Server error.",
+            Type = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
+            Detail = "An unexpected error occurred.",
+            Instance = context.Request.Path
         };
 
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+
+        await context.Response.WriteAsJsonAsync(problemDetails);
     }
 }

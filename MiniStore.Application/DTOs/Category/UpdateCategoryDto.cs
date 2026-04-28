@@ -1,3 +1,7 @@
-﻿namespace MiniStore.Application.DTOs.Category;
+using System.ComponentModel.DataAnnotations;
 
-public record UpdateCategoryDto(string Name);
+namespace MiniStore.Application.DTOs.Category;
+
+public record UpdateCategoryDto(
+    [Required, MaxLength(100)] string Name
+);

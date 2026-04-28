@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MiniStore.API.Middleware;
 using MiniStore.Application.Interfaces;
 using MiniStore.Application.Services;
 using MiniStore.Infrastructure.Persistence;
@@ -32,6 +33,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

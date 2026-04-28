@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace MiniStore.Application.DTOs.Order;
 
 public record OrderItemDto(
-    int ProductId,
-    int Quantity
+    [Range(1, int.MaxValue)] int ProductId,
+    [Range(1, int.MaxValue)] int Quantity
 );

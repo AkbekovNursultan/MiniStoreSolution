@@ -1,7 +1,9 @@
-﻿namespace MiniStore.Application.DTOs.Product;
+using System.ComponentModel.DataAnnotations;
+
+namespace MiniStore.Application.DTOs.Product;
 
 public record UpdateProductDto(
-    string Name,
-    decimal Price,
-    int CategoryId
+    [Required, MaxLength(100)] string Name,
+    [Range(0.01, 10000)] decimal Price,
+    [Required] int CategoryId
 );

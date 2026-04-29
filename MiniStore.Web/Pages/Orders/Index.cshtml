@@ -18,6 +18,7 @@ else
 {
     @foreach (var order in Model.Orders)
     {
+        var total = order.Items.Sum(i => Model.Products.TryGetValue(i.ProductId, out var p) ? p.Price * i.Quantity : 0);
         <div class="order-card d-flex justify-content-between align-items-center">
             <div>
                 <p class="fw-semibold mb-0">Заказ #@order.Id</p>
@@ -25,6 +26,7 @@ else
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span style="color: var(--text-muted); font-size: 0.9rem;">@order.Items.Count поз.</span>
+                <span class="fw-bold" style="color: var(--accent);">@total.ToString("N0") ₽</span>
                 <a href="/Orders/Details?id=@order.Id" class="btn btn-nm btn-sm">Подробнее →</a>
             </div>
         </div>

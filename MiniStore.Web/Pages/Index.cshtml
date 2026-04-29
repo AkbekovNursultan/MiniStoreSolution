@@ -44,15 +44,23 @@ else
             var icon = icons.TryGetValue(catName, out var i) ? i : "📦";
             <div class="col">
                 <div class="product-card h-100 d-flex flex-column">
-                    <div class="product-icon">@icon</div>
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" alt="@product.Name" class="product-img" />
+                    }
+                    else
+                    {
+                        <div class="product-icon">@icon</div>
+                    }
                     <div class="p-3 d-flex flex-column flex-grow-1">
                         <span class="category-badge">@catName</span>
                         <p class="product-name mb-auto">@product.Name</p>
-                        <p class="product-price mt-2 mb-3">@product.Price.ToString("C")</p>
+                        <p class="product-price mt-2 mb-3">@product.Price.ToString("N0") ₽</p>
                         <form method="post" asp-page-handler="AddToCart">
                             <input type="hidden" name="productId" value="@product.Id" />
                             <input type="hidden" name="name" value="@product.Name" />
                             <input type="hidden" name="price" value="@product.Price" />
+                            <input type="hidden" name="imageUrl" value="@product.ImageUrl" />
                             <button type="submit" class="btn btn-accent w-100">В корзину</button>
                         </form>
                     </div>

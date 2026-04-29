@@ -4,32 +4,54 @@
     ViewData["Title"] = $"Заказ #{Model.Order?.Id}";
 }
 
+@{
+    var orderTotal = (Model.Order?.Items ?? [])
+        .Sum(i => Model.Products.TryGetValue(i.ProductId, out var p) ? p.Price * i.Quantity : 0);
+}
+
 <div class="d-flex align-items-center gap-3 mb-4">
-    <a href="/Orders" class="btn btn-nm btn-sm">← Назад</a>
-    <h1 class="page-title mb-0">Заказ #@Model.Order?.Id</h1>
-    <small style="color: var(--text-muted);">@Model.Order?.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+    <a href="/Orders" class="btn-nm btn">← Назад</a>
+    <div>
+        <h1 class="page-title mb-0">Заказ #@Model.Order?.Id</h1>
+        <small style="color: var(--text-muted);">@Model.Order?.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+    </div>
+    <div class="ms-auto text-end">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Итого</div>
+        <div class="fw-bold fs-5" style="color: var(--accent);">@orderTotal.ToString("N0") ₽</div>
+    </div>
 </div>
 
-<div class="nm-card p-4" style="max-width: 560px;">
-    <table class="table mb-0">
-        <thead>
-            <tr style="color: var(--text-muted); font-size: 0.85rem;">
-                <th class="border-0 pb-3">Товар</th>
-                <th class="border-0 pb-3 text-center">Кол-во</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Order?.Items ?? [])
-            {
-                <tr>
-                    <td class="border-0 py-2 fw-semibold">
-                        @(Model.ProductNames.TryGetValue(item.ProductId, out var name) ? name : $"Товар #{item.ProductId}")
-                    </td>
-                    <td class="border-0 py-2 text-center" style="color: var(--accent); font-weight: 600;">
-                        @item.Quantity шт.
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var item in Model.Order?.Items ?? [])
+    {
+        var product = Model.Products.TryGetValue(item.ProductId, out var p) ? p : null;
+        <div class="col">
+            <div class="product-card h-100 d-flex flex-column">
+                @if (product?.ImageUrl is not null)
+                {
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-img" />
+                }
+                else
+                {
+                    <div class="product-icon">📦</div>
+                }
+                <div class="p-3 d-flex flex-column flex-grow-1">
+                    <p class="product-name mb-1">@(product?.Name ?? $"Товар #{item.ProductId}")</p>
+                    @if (product is not null)
+                    {
+                        <p class="mb-1" style="color: var(--text-muted); font-size: 0.85rem;">
+                            @product.Price.ToString("N0") ₽ × @item.Quantity шт.
+                        </p>
+                        <p class="mt-auto mb-0 product-price">@((product.Price * item.Quantity).ToString("N0")) ₽</p>
+                    }
+                    else
+                    {
+                        <p class="mt-auto mb-0" style="color: var(--text-muted); font-size: 0.9rem;">
+                            Количество: <strong style="color: var(--accent);">@item.Quantity шт.</strong>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </div>

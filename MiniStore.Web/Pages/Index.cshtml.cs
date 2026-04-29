@@ -30,13 +30,14 @@ public class IndexModel : PageModel
         Products = categoryId.HasValue ? all.Where(p => p.CategoryId == categoryId) : all;
     }
 
-    public IActionResult OnPostAddToCart(int productId, string name, decimal price)
+    public IActionResult OnPostAddToCart(int productId, string name, decimal price, string? imageUrl)
     {
         CartSessionHelper.AddItem(HttpContext.Session, new CartItem
         {
             ProductId = productId,
             Name = name,
             Price = price,
+            ImageUrl = imageUrl,
             Quantity = 1
         });
         return RedirectToPage();

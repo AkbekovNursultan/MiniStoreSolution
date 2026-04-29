@@ -1,8 +1,13 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Application.Interfaces;
 using MiniStore.Application.Services;
 using MiniStore.Infrastructure.Persistence;
 using MiniStore.Infrastructure.Repositories;
+
+var culture = new CultureInfo("ru-RU");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 var builder = WebApplication.CreateBuilder(args);
 

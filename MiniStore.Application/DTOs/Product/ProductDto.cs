@@ -4,5 +4,6 @@ public record ProductDto(
     int Id,
     string Name,
     decimal Price,
-    int CategoryId
+    int CategoryId,
+    string? ImageUrl
 );

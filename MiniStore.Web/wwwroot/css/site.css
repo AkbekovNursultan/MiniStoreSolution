@@ -102,10 +102,17 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* ── Product icon ── */
+/* ── Product image / icon ── */
+.product-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border);
+}
+
 .product-icon {
     width: 100%;
-    height: 110px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;

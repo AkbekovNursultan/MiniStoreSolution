@@ -21,9 +21,18 @@ else
             @foreach (var item in Model.Items)
             {
                 <div class="cart-item d-flex align-items-center gap-3">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.Name"
+                             style="width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0;" />
+                    }
+                    else
+                    {
+                        <div style="width: 64px; height: 64px; border-radius: var(--radius-sm); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0;">📦</div>
+                    }
                     <div class="flex-grow-1">
                         <p class="fw-semibold mb-0" style="font-size: 0.95rem;">@item.Name</p>
-                        <small style="color: var(--text-muted);">@item.Price.ToString("C") за шт.</small>
+                        <small style="color: var(--text-muted);">@item.Price.ToString("N0") ₽ за шт.</small>
                     </div>
 
                     <div class="qty-control d-flex align-items-center gap-0">
@@ -39,7 +48,7 @@ else
                     </div>
 
                     <span class="fw-bold" style="min-width: 80px; text-align: right; color: var(--accent);">
-                        @item.Total.ToString("C")
+                        @item.Total.ToString("N0") ₽
                     </span>
 
                     <form method="post" asp-page-handler="Remove">
@@ -64,7 +73,7 @@ else
                 <hr style="border-color: var(--shadow-dark);" />
                 <div class="d-flex justify-content-between mb-4">
                     <span class="fw-bold fs-5">Сумма:</span>
-                    <span class="fw-bold fs-5" style="color: var(--accent);">@Model.Items.Sum(i => i.Total).ToString("C")</span>
+                    <span class="fw-bold fs-5" style="color: var(--accent);">@Model.Items.Sum(i => i.Total).ToString("N0") ₽</span>
                 </div>
                 <form method="post" asp-page-handler="Checkout">
                     <button type="submit" class="btn btn-accent w-100 mb-2">Оформить заказ</button>

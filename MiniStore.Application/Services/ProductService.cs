@@ -21,7 +21,7 @@ public class ProductService : IProductService
         _logger.LogInformation("Fetching all products");
         var products = await _repository.GetAllAsync();
 
-        return products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.CategoryId));
+        return products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.CategoryId, p.ImageUrl));
     }
 
     public async Task<ProductDto?> GetByIdAsync(int id)
@@ -35,7 +35,7 @@ public class ProductService : IProductService
             return null;
         }
 
-        return new ProductDto(product.Id, product.Name, product.Price, product.CategoryId);
+        return new ProductDto(product.Id, product.Name, product.Price, product.CategoryId, product.ImageUrl);
     }
 
     public async Task<ProductDto> AddAsync(CreateProductDto dto)
@@ -51,7 +51,7 @@ public class ProductService : IProductService
         await _repository.SaveAsync();
 
         _logger.LogInformation("Created product {ProductId}", product.Id);
-        return new ProductDto(product.Id, product.Name, product.Price, product.CategoryId);
+        return new ProductDto(product.Id, product.Name, product.Price, product.CategoryId, product.ImageUrl);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)

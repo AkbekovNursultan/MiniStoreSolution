@@ -1,0 +1,17 @@
+@page
+@model MiniStore.Web.Pages.Categories.EditModel
+@{
+    ViewData["Title"] = "Изменить категорию";
+}
+
+<h2>Изменить категорию</h2>
+
+<form method="post" class="mt-3" style="max-width: 400px;">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Название</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-warning">Сохранить</button>
+    <a href="/Categories" class="btn btn-secondary ms-2">Отмена</a>
+</form>

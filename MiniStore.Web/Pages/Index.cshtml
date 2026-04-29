@@ -1,15 +1,49 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Главная";
+    ViewData["Title"] = "Каталог";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4">MiniStore</h1>
-    <p class="lead text-muted mb-4">Система управления магазином</p>
-    <div class="d-flex justify-content-center gap-3">
-        <a href="/Categories" class="btn btn-outline-primary btn-lg">Категории</a>
-        <a href="/Products" class="btn btn-outline-success btn-lg">Товары</a>
-        <a href="/Orders" class="btn btn-outline-warning btn-lg">Заказы</a>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Каталог товаров</h2>
 </div>
+
+<div class="mb-3">
+    <a href="/" class="btn btn-sm @(Model.SelectedCategoryId == null ? "btn-dark" : "btn-outline-dark")">Все</a>
+    @foreach (var cat in Model.Categories)
+    {
+        <a href="/?categoryId=@cat.Id"
+           class="btn btn-sm ms-1 @(Model.SelectedCategoryId == cat.Id ? "btn-dark" : "btn-outline-dark")">
+            @cat.Name
+        </a>
+    }
+</div>
+
+@if (!Model.Products.Any())
+{
+    <p class="text-muted">Товаров пока нет.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text text-muted">@product.Price.ToString("C")</p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <input type="hidden" name="name" value="@product.Name" />
+                            <input type="hidden" name="price" value="@product.Price" />
+                            <button type="submit" class="btn btn-primary w-100">В корзину</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

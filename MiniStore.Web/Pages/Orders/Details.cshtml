@@ -1,13 +1,13 @@
 @page
 @model MiniStore.Web.Pages.Orders.DetailsModel
 @{
-    ViewData["Title"] = "Заказ #@Model.Order?.Id";
+    ViewData["Title"] = $"Заказ #{Model.Order?.Id}";
 }
 
 <h2>Заказ #@Model.Order?.Id</h2>
 <p class="text-muted">Дата: @Model.Order?.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
 
-<table class="table table-bordered" style="max-width: 500px;">
+<table class="table mt-3" style="max-width: 500px;">
     <thead>
         <tr>
             <th>Товар</th>
@@ -25,4 +25,4 @@
     </tbody>
 </table>
 
-<a href="/Orders" class="btn btn-secondary">Назад</a>
+<a href="/Orders" class="btn btn-outline-secondary mt-2">← Назад к заказам</a>

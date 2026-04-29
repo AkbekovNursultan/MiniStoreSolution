@@ -1,0 +1,63 @@
+@page
+@model MiniStore.Web.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h2>Корзина</h2>
+
+@if (!Model.Items.Any())
+{
+    <p class="text-muted mt-3">Корзина пуста. <a href="/">Вернуться в каталог</a></p>
+}
+else
+{
+    <table class="table align-middle mt-3">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center gap-2">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="99" class="form-control" style="width: 75px;" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">OK</button>
+                        </form>
+                    </td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <form method="post" asp-page-handler="Remove">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end fw-bold">Итого:</td>
+                <td class="fw-bold">@Model.Items.Sum(i => i.Total).ToString("C")</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="d-flex gap-2 mt-3">
+        <a href="/" class="btn btn-outline-secondary">Продолжить покупки</a>
+        <form method="post" asp-page-handler="Checkout">
+            <button type="submit" class="btn btn-success">Оформить заказ</button>
+        </form>
+    </div>
+}

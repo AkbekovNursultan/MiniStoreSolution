@@ -1,33 +1,36 @@
 @page
 @model MiniStore.Web.Pages.Orders.IndexModel
 @{
-    ViewData["Title"] = "Заказы";
+    ViewData["Title"] = "Мои заказы";
 }
 
-<h2>Заказы</h2>
-<a href="/Orders/Create" class="btn btn-primary mb-3">+ Новый заказ</a>
+<h2>Мои заказы</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Дата</th>
-            <th>Товаров</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model.Orders)
-        {
+@if (!Model.Orders.Any())
+{
+    <p class="text-muted mt-3">Заказов пока нет. <a href="/">Перейти в каталог</a></p>
+}
+else
+{
+    <table class="table mt-3">
+        <thead>
             <tr>
-                <td>@order.Id</td>
-                <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                <td>@order.Items.Count</td>
-                <td>
-                    <a href="/Orders/Details?id=@order.Id" class="btn btn-sm btn-info">Подробнее</a>
-                    <a href="/Orders/Delete?id=@order.Id" class="btn btn-sm btn-danger">Удалить</a>
-                </td>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Товаров</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@order.Items.Count поз.</td>
+                    <td><a href="/Orders/Details?id=@order.Id" class="btn btn-sm btn-outline-primary">Подробнее</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

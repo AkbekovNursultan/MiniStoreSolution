@@ -17,6 +17,7 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        Orders = await _orderService.GetAllAsync();
+        var all = await _orderService.GetAllAsync();
+        Orders = all.OrderByDescending(o => o.CreatedAt);
     }
 }

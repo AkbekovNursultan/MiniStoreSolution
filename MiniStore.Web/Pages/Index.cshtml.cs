@@ -2,17 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniStore.Application.DTOs.Category;
 using MiniStore.Application.DTOs.Product;
-using MiniStore.Application.Interfaces;
 using MiniStore.Web.Models;
+using MiniStore.Web.Services;
 
 namespace MiniStore.Web.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly IProductService _productService;
-    private readonly ICategoryService _categoryService;
+    private readonly IProductApiClient _productService;
+    private readonly ICategoryApiClient _categoryService;
 
-    public IndexModel(IProductService productService, ICategoryService categoryService)
+    public IndexModel(IProductApiClient productService, ICategoryApiClient categoryService)
     {
         _productService = productService;
         _categoryService = categoryService;

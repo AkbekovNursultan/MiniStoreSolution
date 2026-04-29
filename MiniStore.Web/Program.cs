@@ -1,9 +1,5 @@
 using System.Globalization;
-using Microsoft.EntityFrameworkCore;
-using MiniStore.Application.Interfaces;
-using MiniStore.Application.Services;
-using MiniStore.Infrastructure.Persistence;
-using MiniStore.Infrastructure.Repositories;
+using MiniStore.Web.Services;
 
 var culture = new CultureInfo("ru-RU");
 CultureInfo.DefaultThreadCurrentCulture = culture;
@@ -13,17 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"]
+    ?? throw new InvalidOperationException("Configuration value 'ApiBaseUrl' is not configured.");
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddHttpClient<IProductApiClient, ProductApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddHttpClient<ICategoryApiClient, CategoryApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
+builder.Services.AddHttpClient<IOrderApiClient, OrderApiClient>(c => c.BaseAddress = new Uri(apiBaseUrl));
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -48,12 +39,5 @@ app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
-    SeedData.Initialize(context);
-}
 
 app.Run();

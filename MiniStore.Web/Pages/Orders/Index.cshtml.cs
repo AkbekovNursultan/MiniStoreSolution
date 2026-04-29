@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniStore.Application.DTOs.Order;
 using MiniStore.Application.DTOs.Product;
-using MiniStore.Application.Interfaces;
+using MiniStore.Web.Services;
 
 namespace MiniStore.Web.Pages.Orders;
 
 public class IndexModel : PageModel
 {
-    private readonly IOrderService _orderService;
-    private readonly IProductService _productService;
+    private readonly IOrderApiClient _orderService;
+    private readonly IProductApiClient _productService;
 
-    public IndexModel(IOrderService orderService, IProductService productService)
+    public IndexModel(IOrderApiClient orderService, IProductApiClient productService)
     {
         _orderService = orderService;
         _productService = productService;

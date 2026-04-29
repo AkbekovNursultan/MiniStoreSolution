@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniStore.Application.DTOs.Order;
-using MiniStore.Application.Interfaces;
 using MiniStore.Web.Models;
+using MiniStore.Web.Services;
 
 namespace MiniStore.Web.Pages.Cart;
 
 public class IndexModel : PageModel
 {
-    private readonly IOrderService _orderService;
+    private readonly IOrderApiClient _orderService;
 
-    public IndexModel(IOrderService orderService)
+    public IndexModel(IOrderApiClient orderService)
     {
         _orderService = orderService;
     }

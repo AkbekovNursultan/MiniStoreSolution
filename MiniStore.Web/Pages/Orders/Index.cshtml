@@ -4,33 +4,29 @@
     ViewData["Title"] = "Мои заказы";
 }
 
-<h2>Мои заказы</h2>
+<h1 class="page-title">Мои заказы</h1>
 
 @if (!Model.Orders.Any())
 {
-    <p class="text-muted mt-3">Заказов пока нет. <a href="/">Перейти в каталог</a></p>
+    <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <p class="fs-5 mb-3">Заказов пока нет</p>
+        <a href="/" class="btn btn-accent">Перейти в каталог</a>
+    </div>
 }
 else
 {
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Дата</th>
-                <th>Товаров</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model.Orders)
-            {
-                <tr>
-                    <td>#@order.Id</td>
-                    <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@order.Items.Count поз.</td>
-                    <td><a href="/Orders/Details?id=@order.Id" class="btn btn-sm btn-outline-primary">Подробнее</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var order in Model.Orders)
+    {
+        <div class="order-card d-flex justify-content-between align-items-center">
+            <div>
+                <p class="fw-semibold mb-0">Заказ #@order.Id</p>
+                <small style="color: var(--text-muted);">@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span style="color: var(--text-muted); font-size: 0.9rem;">@order.Items.Count поз.</span>
+                <a href="/Orders/Details?id=@order.Id" class="btn btn-nm btn-sm">Подробнее →</a>
+            </div>
+        </div>
+    }
 }

@@ -28,6 +28,24 @@ public class IndexModel : PageModel
         return RedirectToPage();
     }
 
+    public IActionResult OnPostIncrease(int productId)
+    {
+        var cart = CartSessionHelper.GetCart(HttpContext.Session);
+        var item = cart.FirstOrDefault(i => i.ProductId == productId);
+        if (item is not null)
+            CartSessionHelper.UpdateQuantity(HttpContext.Session, productId, item.Quantity + 1);
+        return RedirectToPage();
+    }
+
+    public IActionResult OnPostDecrease(int productId)
+    {
+        var cart = CartSessionHelper.GetCart(HttpContext.Session);
+        var item = cart.FirstOrDefault(i => i.ProductId == productId);
+        if (item is not null)
+            CartSessionHelper.UpdateQuantity(HttpContext.Session, productId, item.Quantity - 1);
+        return RedirectToPage();
+    }
+
     public IActionResult OnPostRemove(int productId)
     {
         CartSessionHelper.RemoveItem(HttpContext.Session, productId);

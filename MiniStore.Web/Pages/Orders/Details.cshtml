@@ -4,25 +4,32 @@
     ViewData["Title"] = $"Заказ #{Model.Order?.Id}";
 }
 
-<h2>Заказ #@Model.Order?.Id</h2>
-<p class="text-muted">Дата: @Model.Order?.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+<div class="d-flex align-items-center gap-3 mb-4">
+    <a href="/Orders" class="btn btn-nm btn-sm">← Назад</a>
+    <h1 class="page-title mb-0">Заказ #@Model.Order?.Id</h1>
+    <small style="color: var(--text-muted);">@Model.Order?.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+</div>
 
-<table class="table mt-3" style="max-width: 500px;">
-    <thead>
-        <tr>
-            <th>Товар</th>
-            <th>Количество</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Order?.Items ?? [])
-        {
-            <tr>
-                <td>@(Model.ProductNames.TryGetValue(item.ProductId, out var name) ? name : $"Товар #{item.ProductId}")</td>
-                <td>@item.Quantity</td>
+<div class="nm-card p-4" style="max-width: 560px;">
+    <table class="table mb-0">
+        <thead>
+            <tr style="color: var(--text-muted); font-size: 0.85rem;">
+                <th class="border-0 pb-3">Товар</th>
+                <th class="border-0 pb-3 text-center">Кол-во</th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<a href="/Orders" class="btn btn-outline-secondary mt-2">← Назад к заказам</a>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Order?.Items ?? [])
+            {
+                <tr>
+                    <td class="border-0 py-2 fw-semibold">
+                        @(Model.ProductNames.TryGetValue(item.ProductId, out var name) ? name : $"Товар #{item.ProductId}")
+                    </td>
+                    <td class="border-0 py-2 text-center" style="color: var(--accent); font-weight: 600;">
+                        @item.Quantity шт.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

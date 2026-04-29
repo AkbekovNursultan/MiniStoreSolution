@@ -2,18 +2,26 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Каталог";
+    var icons = new Dictionary<string, string>
+    {
+        ["Электроника"] = "💻",
+        ["Книги"] = "📚",
+        ["Одежда"] = "👕",
+        ["Спорт"] = "⚽",
+        ["Дом"] = "🏠",
+        ["Electronics"] = "💻",
+        ["Books"] = "📚"
+    };
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Каталог товаров</h2>
-</div>
+<h1 class="page-title">Каталог товаров</h1>
 
-<div class="mb-3">
-    <a href="/" class="btn btn-sm @(Model.SelectedCategoryId == null ? "btn-dark" : "btn-outline-dark")">Все</a>
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="/" class="filter-pill @(Model.SelectedCategoryId == null ? "active" : "")">Все товары</a>
     @foreach (var cat in Model.Categories)
     {
         <a href="/?categoryId=@cat.Id"
-           class="btn btn-sm ms-1 @(Model.SelectedCategoryId == cat.Id ? "btn-dark" : "btn-outline-dark")">
+           class="filter-pill @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
             @cat.Name
         </a>
     }
@@ -21,27 +29,31 @@
 
 @if (!Model.Products.Any())
 {
-    <p class="text-muted">Товаров пока нет.</p>
+    <div class="empty-state">
+        <div class="empty-icon">🛍️</div>
+        <p class="fs-5 mb-3">В этой категории пока нет товаров</p>
+        <a href="/" class="btn-accent btn">Смотреть все</a>
+    </div>
 }
 else
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var product in Model.Products)
         {
+            var catName = Model.Categories.FirstOrDefault(c => c.Id == product.CategoryId)?.Name ?? "";
+            var icon = icons.TryGetValue(catName, out var i) ? i : "📦";
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text text-muted">@product.Price.ToString("C")</p>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <form method="post" asp-page-handler="AddToCart">
-                            <input type="hidden" name="productId" value="@product.Id" />
-                            <input type="hidden" name="name" value="@product.Name" />
-                            <input type="hidden" name="price" value="@product.Price" />
-                            <button type="submit" class="btn btn-primary w-100">В корзину</button>
-                        </form>
-                    </div>
+                <div class="nm-card h-100 p-3 d-flex flex-column">
+                    <div class="product-icon">@icon</div>
+                    <span class="category-badge">@catName</span>
+                    <p class="product-name mb-1">@product.Name</p>
+                    <p class="product-price mt-auto mb-3">@product.Price.ToString("C")</p>
+                    <form method="post" asp-page-handler="AddToCart">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <input type="hidden" name="name" value="@product.Name" />
+                        <input type="hidden" name="price" value="@product.Price" />
+                        <button type="submit" class="btn btn-accent w-100">В корзину</button>
+                    </form>
                 </div>
             </div>
         }
